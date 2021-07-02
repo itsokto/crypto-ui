@@ -1,0 +1,13 @@
+.crypto-card {
+  &__price {
+    @apply text-green-300;
+
+    &--low {
+      @apply text-red-300;
+
+      mat-icon {
+        transform: scale(1, -1);
+      }
+    }
+  }
+}

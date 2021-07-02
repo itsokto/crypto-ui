@@ -1,0 +1,59 @@
+<header>
+  <div
+    [@shrink]="!isLoading ? 'less' : 'default'"
+    class="h-screen bg-gradient-to-br from-blue-900 to-indigo-900 flex flex-col items-center text-center justify-center"
+  >
+    <p class="text-white text-9xl">
+      <span>{{ title }}</span>
+    </p>
+    <p class="text-gray-200 text-4xl bg-gray-800 mt-4">
+      <span class="text-gray-400">&#123;</span>
+      {{ currentCrypto$ | async }}
+      <span class="text-gray-400">&#125;</span>
+    </p>
+  </div>
+</header>
+
+<main *ngIf="!isLoading">
+  <div class="mx-auto max-w-7xl p-4 flex place-content-between items-center">
+    <span class="text-gray-200 text-xl">Market Live Data</span>
+    <!--    <div class="px-4 py-2 rounded-lg text-gray-700 bg-white">Currency Dropdown [WiP]</div>-->
+    <button class='text-gray-200' mat-stroked-button (click)='openSelectCurrencyDialog()'>
+      {{ selectedCurrency.symbol }}
+      <mat-icon>expand_more</mat-icon>
+    </button>
+  </div>
+  <div class="mx-auto h-screen max-w-7xl flex flex-wrap items-center justify-center">
+    <div class="container blur-2xl w-72 rounded-sm py-2 px-4 m-1 bg-gray-700" *ngFor="let item of listing | async">
+      <p class="text-xl text-gray-200">
+        {{ item.name }}
+        <span class="text-gray-400"> {{ item.symbol }} </span>
+      </p>
+      <p class="text-gray-400">
+        {{ selectedCurrency.sign }} {{ item.quote[selectedCurrency.symbol]?.price | number: '1.1-6' }}
+      </p>
+      <div
+        [@update]="item.quote[selectedCurrency.symbol]?.percent_change_1h"
+        class="flex crypto-card__price"
+        [ngClass]="{
+          'crypto-card__price--low': item.quote[selectedCurrency.symbol]?.percent_change_1h | pricelowhigh
+        }"
+      >
+        <span class="text-gray-400 mr-2">1h </span>
+        <mat-icon class="mr-2">trending_up</mat-icon>
+        <span>{{ item.quote[selectedCurrency.symbol]?.percent_change_1h | number: '1.1-4' }}%</span>
+      </div>
+      <div
+        [@update]="item.quote[selectedCurrency.symbol]?.percent_change_7d"
+        class="flex crypto-card__price"
+        [ngClass]="{
+          'crypto-card__price--low': item.quote[selectedCurrency.symbol]?.percent_change_7d | pricelowhigh
+        }"
+      >
+        <span class="text-gray-400 mr-2">7d </span>
+        <mat-icon class="mr-2">trending_up</mat-icon>
+        <span>{{ item.quote[selectedCurrency.symbol]?.percent_change_7d | number: '1.1-4' }}%</span>
+      </div>
+    </div>
+  </div>
+</main>
