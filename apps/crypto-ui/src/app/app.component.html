@@ -27,37 +27,64 @@
   <div class="mx-auto h-screen max-w-8xl flex flex-wrap items-center justify-center">
     <div
       class="container blur-2xl w-80 rounded-sm py-2 px-4 m-1 bg-gray-700"
-      *ngFor="let item of listing | async; trackBy: trackByFn"
+      *ngFor="let item of listing; trackBy: trackByFn"
     >
       <div class="flex items-center text-xl text-gray-200 mb-2">
-        <mat-icon class="mr-2 crypto-card__icon" [svgIcon]="cryptoIconRegistry.resolveIconWithFallback(item.symbol)"></mat-icon>
+        <mat-icon
+          class="mr-2 crypto-card__icon"
+          [svgIcon]="cryptoIconRegistry.resolveIconWithFallback(item.symbol)"
+        ></mat-icon>
         <span class="mr-2">{{ item.name }}</span>
         <span class="text-gray-400"> {{ item.symbol }} </span>
       </div>
-      <p class="text-gray-400 mb-2">
+      <p class="text-base text-gray-400 mb-2">
         {{ selectedCurrency.sign }} {{ item.quote[selectedCurrency.symbol]?.price | number: '1.1-6' }}
       </p>
-      <div
-        [@priceUpdate]="item.quote[selectedCurrency.symbol]?.percent_change_1h"
-        class="crypto-card__price"
-        [ngClass]="{
-          'crypto-card__price--low': item.quote[selectedCurrency.symbol]?.percent_change_1h | pricelowhigh
-        }"
-      >
-        <span class="text-gray-400 mr-2">1h</span>
-        <mat-icon class="mr-2">arrow_drop_up</mat-icon>
-        <span>{{ item.quote[selectedCurrency.symbol]?.percent_change_1h | number: '1.1-4' }}%</span>
-      </div>
-      <div
-        [@priceUpdate]="item.quote[selectedCurrency.symbol]?.percent_change_7d"
-        class="crypto-card__price"
-        [ngClass]="{
-          'crypto-card__price--low': item.quote[selectedCurrency.symbol]?.percent_change_7d | pricelowhigh
-        }"
-      >
-        <span class="text-gray-400 mr-2">7d</span>
-        <mat-icon class="mr-2">arrow_drop_up</mat-icon>
-        <span>{{ item.quote[selectedCurrency.symbol]?.percent_change_7d | number: '1.1-4' }}%</span>
+      <div class="grid grid-cols-2 grid-rows-2">
+        <div
+          [@priceUpdate]="item.quote[selectedCurrency.symbol]?.percent_change_1h"
+          class="crypto-card__price"
+          [ngClass]="{
+            'crypto-card__price--low': item.quote[selectedCurrency.symbol]?.percent_change_1h | pricelowhigh
+          }"
+        >
+          <span class="text-gray-400 mr-2">1h</span>
+          <mat-icon class="mr-2">arrow_drop_up</mat-icon>
+          <span>{{ item.quote[selectedCurrency.symbol]?.percent_change_1h | number: '1.1-4' }}%</span>
+        </div>
+        <div
+          [@priceUpdate]="item.quote[selectedCurrency.symbol]?.percent_change_24h"
+          class="crypto-card__price"
+          [ngClass]="{
+            'crypto-card__price--low': item.quote[selectedCurrency.symbol]?.percent_change_24h | pricelowhigh
+          }"
+        >
+          <span class="text-gray-400 mr-2">24h</span>
+          <mat-icon class="mr-2">arrow_drop_up</mat-icon>
+          <span>{{ item.quote[selectedCurrency.symbol]?.percent_change_24h | number: '1.1-4' }}%</span>
+        </div>
+        <div
+          [@priceUpdate]="item.quote[selectedCurrency.symbol]?.percent_change_7d"
+          class="crypto-card__price"
+          [ngClass]="{
+            'crypto-card__price--low': item.quote[selectedCurrency.symbol]?.percent_change_7d | pricelowhigh
+          }"
+        >
+          <span class="text-gray-400 mr-2">7d</span>
+          <mat-icon class="mr-2">arrow_drop_up</mat-icon>
+          <span>{{ item.quote[selectedCurrency.symbol]?.percent_change_7d | number: '1.1-4' }}%</span>
+        </div>
+        <div
+          [@priceUpdate]="item.quote[selectedCurrency.symbol]?.percent_change_30d"
+          class="crypto-card__price"
+          [ngClass]="{
+            'crypto-card__price--low': item.quote[selectedCurrency.symbol]?.percent_change_30d | pricelowhigh
+          }"
+        >
+          <span class="text-gray-400 mr-2">30d</span>
+          <mat-icon class="mr-2">arrow_drop_up</mat-icon>
+          <span>{{ item.quote[selectedCurrency.symbol]?.percent_change_30d | number: '1.1-4' }}%</span>
+        </div>
       </div>
     </div>
   </div>

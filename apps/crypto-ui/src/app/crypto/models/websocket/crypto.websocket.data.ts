@@ -15,4 +15,5 @@ export interface CryptoWebsocketCurrency {
     p30d?: number;
     p: number;
   };
+  t: number;
 }

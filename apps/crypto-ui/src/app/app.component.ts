@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CryptoApiService } from './crypto/services/crypto.api.service';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { CryptoListing } from './crypto/models/crypto.listing';
+import { BehaviorSubject } from 'rxjs';
+import { CryptoListing, CryptoQuote } from './crypto/models/crypto.listing';
 import { filter, retry, switchMap, take, throttleTime } from 'rxjs/operators';
 import { CryptoCurrency, CryptoCurrencyMap } from './crypto/models/crypto.currency';
 import { trigger, style, animate, transition, animation, useAnimation, state } from '@angular/animations';
@@ -32,8 +32,7 @@ const shrinkAnimation = animation([animate('1s cubic-bezier(0.16, 1, 0.3, 1)')])
 })
 export class AppComponent implements OnInit {
   title = '';
-  listing = new Observable<CryptoListing[]>();
-  currencies = new Observable<CryptoCurrency[]>();
+  listing: CryptoListing[] = [];
   selectedCurrency: CryptoCurrency = { id: 2781, name: '', symbol: 'USD', sign: '$' };
   currentCryptoSubject = new BehaviorSubject<string>('...');
   currentCrypto$ = this.currentCryptoSubject.pipe(throttleTime(200));
@@ -54,10 +53,12 @@ export class AppComponent implements OnInit {
 
     this._cryptoApi.setApiKey('1507c111-13c0-45f2-82a3-4b9308314aa2');
 
-    this.listing = this._store.select(cryptoSelectors.selectAll);
+    this._store.select(cryptoSelectors.selectAll).subscribe((listing) => {
+      this.listing = listing;
 
-    this.listing.pipe(filter((data) => data.length > 0)).subscribe(() => {
-      this.isLoading = false;
+      if (listing.length > 0) {
+        this.isLoading = false;
+      }
     });
 
     this._cryptoApi.getFiatMap().subscribe((data) => {
@@ -118,13 +119,28 @@ export class AppComponent implements OnInit {
   }
 
   private updateCrypto(data: CryptoWebsocketData<CryptoWebsocketCurrency>): void {
-    const quote: Record<string, any> = {};
-    const price = data.d.cr.p / this.currenciesQuotesLatest[this.selectedCurrency.id].quote['USD'].price;
+    const quote: Record<string, CryptoQuote> = {};
 
+    // all updates come in USD, so we need to convert them to selected currency
+    const price = this.currenciesQuotesLatest[this.selectedCurrency.id].quote['USD'].price;
+    const percent_change_30d = this.listing.find((list) => list.id === data.d.cr.id)?.quote[
+      this.selectedCurrency.symbol
+    ]?.percent_change_30d;
+
+    const newPrice = data.d.cr.p / price;
+
+    // TODO: normalize store
     quote[this.selectedCurrency.symbol] = {
+      last_updated: new Date(data.d.t),
+      market_cap: 0,
+      percent_change_60d: 0,
+      percent_change_90d: 0,
+      volume_24h: 0,
       percent_change_1h: data.d.cr.p1h,
+      percent_change_24h: data.d.cr.p24h,
       percent_change_7d: data.d.cr.p7d,
-      price: price,
+      percent_change_30d: data.d.cr.p30d ?? percent_change_30d ?? 0,
+      price: newPrice,
     };
 
     this._store.dispatch(
