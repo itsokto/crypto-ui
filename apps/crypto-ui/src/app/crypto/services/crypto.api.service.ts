@@ -20,65 +20,28 @@ export class CryptoApiService {
   }
 
   getListingLatest(convert?: string): Observable<CryptoResponse<CryptoListing[]>> {
-    const params: { convert?: string } = { convert: convert };
+    const params: { convert?: string } = { convert };
 
-    const options: {
-      headers?:
-        | HttpHeaders
-        | {
-            [header: string]: string | string[];
-          };
-      observe?: 'body';
-      responseType?: 'json';
-      params: HttpParams;
-    } = {
-      headers: {
-        'X-CMC_PRO_API_KEY': this._apiKey ?? '',
-      },
-      params: new HttpParams({ fromObject: params }),
-    };
-
-    return this._httpClient.get<CryptoResponse<CryptoListing[]>>('api/cryptocurrency/listings/latest', options);
+    return this.getInternal<CryptoResponse<CryptoListing[]>>('api/cryptocurrency/listings/latest', { params });
   }
 
   getFiatMap(): Observable<CryptoResponse<CryptoCurrency[]>> {
-    const options: {
-      headers?:
-        | HttpHeaders
-        | {
-            [header: string]: string | string[];
-          };
-      observe?: 'body';
-      responseType?: 'json';
-    } = {
-      headers: {
-        'X-CMC_PRO_API_KEY': this._apiKey ?? '',
-      },
-    };
-
-    return this._httpClient.get<CryptoResponse<CryptoCurrency[]>>('api/fiat/map', options);
+    return this.getInternal<CryptoResponse<CryptoCurrency[]>>('api/fiat/map');
   }
 
   getCurrencyMap(): Observable<CryptoResponse<CryptoCurrencyMap[]>> {
-    const options: {
-      headers?:
-        | HttpHeaders
-        | {
-            [header: string]: string | string[];
-          };
-      observe?: 'body';
-      responseType?: 'json';
-    } = {
-      headers: {
-        'X-CMC_PRO_API_KEY': this._apiKey ?? '',
-      },
-    };
-
-    return this._httpClient.get<CryptoResponse<CryptoCurrencyMap[]>>('api/cryptocurrency/map', options);
+    return this.getInternal<CryptoResponse<CryptoCurrencyMap[]>>('api/cryptocurrency/map');
   }
 
   getCurrencyQuotesLatest(ids: number[]): Observable<CryptoResponse<Record<string, CryptoListing>>> {
-    const options: {
+    return this.getInternal<CryptoResponse<Record<string, CryptoListing>>>('api/cryptocurrency/quotes/latest', {
+      params: { id: ids.join() },
+    });
+  }
+
+  private getInternal<T>(
+    url: string,
+    options: {
       headers?:
         | HttpHeaders
         | {
@@ -86,18 +49,21 @@ export class CryptoApiService {
           };
       observe?: 'body';
       responseType?: 'json';
-      params: HttpParams;
-    } = {
-      headers: {
-        'X-CMC_PRO_API_KEY': this._apiKey ?? '',
-      },
-      params: new HttpParams({ fromObject: { id: ids.join() } }),
-    };
+      params?:
+        | HttpParams
+        | {
+            [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean>;
+          };
+    } = {}
+  ): Observable<T> {
+    options.headers ??= {};
+    if (options.headers instanceof HttpHeaders) {
+      options.headers.append('X-CMC_PRO_API_KEY', this._apiKey ?? '');
+    } else {
+      (options.headers as Record<string, string>)['X-CMC_PRO_API_KEY'] = this._apiKey ?? '';
+    }
 
-    return this._httpClient.get<CryptoResponse<Record<string, CryptoListing>>>(
-      'api/cryptocurrency/quotes/latest',
-      options
-    );
+    return this._httpClient.get<T>(url, options);
   }
 
   connect(cryptoIds: number[]): WebSocketSubject<unknown> {
