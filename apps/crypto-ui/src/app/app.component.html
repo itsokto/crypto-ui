@@ -38,24 +38,24 @@
       </p>
       <div
         [@priceUpdate]="item.quote[selectedCurrency.symbol]?.percent_change_1h"
-        class="flex crypto-card__price"
+        class="crypto-card__price"
         [ngClass]="{
           'crypto-card__price--low': item.quote[selectedCurrency.symbol]?.percent_change_1h | pricelowhigh
         }"
       >
         <span class="text-gray-400 mr-2">1h</span>
-        <mat-icon class="mr-2">trending_up</mat-icon>
+        <mat-icon class="mr-2">arrow_drop_up</mat-icon>
         <span>{{ item.quote[selectedCurrency.symbol]?.percent_change_1h | number: '1.1-4' }}%</span>
       </div>
       <div
         [@priceUpdate]="item.quote[selectedCurrency.symbol]?.percent_change_7d"
-        class="flex crypto-card__price"
+        class="crypto-card__price"
         [ngClass]="{
           'crypto-card__price--low': item.quote[selectedCurrency.symbol]?.percent_change_7d | pricelowhigh
         }"
       >
         <span class="text-gray-400 mr-2">7d</span>
-        <mat-icon class="mr-2">trending_up</mat-icon>
+        <mat-icon class="mr-2">arrow_drop_up</mat-icon>
         <span>{{ item.quote[selectedCurrency.symbol]?.percent_change_7d | number: '1.1-4' }}%</span>
       </div>
     </div>
