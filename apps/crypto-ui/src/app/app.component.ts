@@ -21,7 +21,7 @@ const shrinkAnimation = animation([animate('1s cubic-bezier(0.16, 1, 0.3, 1)')])
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   animations: [
-    trigger('update', [transition(':enter', useAnimation(blinkAnimation))]),
+    trigger('priceUpdate', [transition(':increment, :decrement', useAnimation(blinkAnimation))]),
     trigger('shrink', [
       state('false', style({})),
       state('true', style({ height: '20rem' })),
@@ -81,21 +81,7 @@ export class AppComponent implements OnInit {
           return;
         }
 
-        const quote: Record<string, any> = {};
-        const price = data.d.cr.p / this.currenciesQuotesLatest[this.selectedCurrency.id].quote['USD'].price;
-
-        quote[this.selectedCurrency.symbol] = {
-          percent_change_1h: data.d.cr.p1h,
-          percent_change_7d: data.d.cr.p7d,
-          price: price,
-        };
-
-        this._store.dispatch(
-          updateCrypto({
-            id: data.d.cr.id,
-            changes: { quote },
-          })
-        );
+        this.updateCrypto(data);
       });
 
     this._store.dispatch(loadCryptos({ params: { convert: this.selectedCurrency.symbol } }));
@@ -109,9 +95,35 @@ export class AppComponent implements OnInit {
 
     const dialog = this.dialog.open(CurrencyModalComponent, { data, maxWidth: 880 });
 
-    dialog.afterClosed().subscribe((currency: CryptoCurrency) => {
-      this.selectedCurrency = currency ?? this.selectedCurrency;
+    dialog.afterClosed().subscribe((currency: CryptoCurrency | undefined) => {
+      if (!currency || currency.id === this.selectedCurrency.id) {
+        return;
+      }
+
+      this.selectedCurrency = currency;
       this._store.dispatch(loadCryptos({ params: { convert: this.selectedCurrency.symbol } }));
     });
+  }
+
+  trackByFn(index: number, item: CryptoListing) {
+    return item.id;
+  }
+
+  private updateCrypto(data: CryptoWebsocketData<CryptoWebsocketCurrency>): void {
+    const quote: Record<string, any> = {};
+    const price = data.d.cr.p / this.currenciesQuotesLatest[this.selectedCurrency.id].quote['USD'].price;
+
+    quote[this.selectedCurrency.symbol] = {
+      percent_change_1h: data.d.cr.p1h,
+      percent_change_7d: data.d.cr.p7d,
+      price: price,
+    };
+
+    this._store.dispatch(
+      updateCrypto({
+        id: data.d.cr.id,
+        changes: { quote },
+      })
+    );
   }
 }
