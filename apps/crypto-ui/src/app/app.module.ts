@@ -34,7 +34,7 @@ import { MatDialogModule } from '@angular/material/dialog';
       },
     }),
     EffectsModule.forRoot([CryptoEffects]),
-    !environment.production ? StoreDevtoolsModule.instrument({}) : [],
+    !environment.production ? StoreDevtoolsModule.instrument({ maxAge: 50 }) : [],
     ScrollingModule,
     MatMenuModule,
     MatIconModule,
