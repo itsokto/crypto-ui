@@ -12,6 +12,7 @@ import { IAppState } from './store';
 import { loadCryptos, updateCrypto } from './store/actions/crypto.actions';
 import { MatDialog } from '@angular/material/dialog';
 import { CurrencyModalComponent, CurrencyModalData } from './components/modals/currency-modal/currency-modal.component';
+import { CryptoIconRegistryService } from './crypto/services/crypto.icon.registry.service';
 
 const blinkAnimation = animation([animate('0.1s', style({ color: 'white' })), animate('1s', style({}))]);
 const shrinkAnimation = animation([animate('1s cubic-bezier(0.16, 1, 0.3, 1)')]);
@@ -41,9 +42,16 @@ export class AppComponent implements OnInit {
   currenciesQuotesLatest: Record<string, CryptoListing> = {};
   isLoading = true;
 
-  constructor(private _cryptoApi: CryptoApiService, private _store: Store<IAppState>, public dialog: MatDialog) {}
+  constructor(
+    private _cryptoApi: CryptoApiService,
+    private _store: Store<IAppState>,
+    public dialog: MatDialog,
+    public readonly cryptoIconRegistry: CryptoIconRegistryService
+  ) {}
 
   ngOnInit(): void {
+    this.cryptoIconRegistry.registerIcons();
+
     this._cryptoApi.setApiKey('1507c111-13c0-45f2-82a3-4b9308314aa2');
 
     this.listing = this._store.select(cryptoSelectors.selectAll);

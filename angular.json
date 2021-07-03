@@ -17,9 +17,20 @@
             "polyfills": "apps/crypto-ui/src/polyfills.ts",
             "tsConfig": "apps/crypto-ui/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": ["apps/crypto-ui/src/favicon.ico", "apps/crypto-ui/src/assets"],
-            "styles": ["./node_modules/@angular/material/prebuilt-themes/purple-green.css", "apps/crypto-ui/src/styles.scss"],
-            "scripts": [ "./node_modules/hammerjs/hammer.min.js"]
+            "assets": [
+              "apps/crypto-ui/src/favicon.ico",
+              "apps/crypto-ui/src/assets",
+              {
+                "glob": "**/*",
+                "input": "node_modules/cryptocurrency-icons/svg/color",
+                "output": "assets/cryptocurrency-icons/"
+              }
+            ],
+            "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
+              "apps/crypto-ui/src/styles.scss"
+            ],
+            "scripts": ["./node_modules/hammerjs/hammer.min.js"]
           },
           "configurations": {
             "production": {
