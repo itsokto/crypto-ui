@@ -23,9 +23,9 @@ const shrinkAnimation = animation([animate('1s cubic-bezier(0.16, 1, 0.3, 1)')])
   animations: [
     trigger('update', [transition(':enter', useAnimation(blinkAnimation))]),
     trigger('shrink', [
-      state('default', style({})),
-      state('less', style({ height: '20rem' })),
-      transition('default => less', useAnimation(shrinkAnimation)),
+      state('false', style({})),
+      state('true', style({ height: '20rem' })),
+      transition('false => true', useAnimation(shrinkAnimation)),
     ]),
   ],
 })

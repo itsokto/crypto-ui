@@ -1,6 +1,6 @@
 <header>
   <div
-    [@shrink]="!isLoading ? 'less' : 'default'"
+    [@shrink]="!isLoading"
     class="h-screen bg-gradient-to-br from-blue-900 to-indigo-900 flex flex-col items-center text-center justify-center"
   >
     <p class="text-white text-9xl">
@@ -8,7 +8,7 @@
     </p>
     <p class="text-gray-200 text-4xl bg-gray-800 mt-4">
       <span class="text-gray-400">&#123;</span>
-      {{ currentCrypto$ | async }}
+      <span> {{ currentCrypto$ | async }} </span>
       <span class="text-gray-400">&#125;</span>
     </p>
   </div>
@@ -33,24 +33,24 @@
         {{ selectedCurrency.sign }} {{ item.quote[selectedCurrency.symbol]?.price | number: '1.1-6' }}
       </p>
       <div
-        [@update]="item.quote[selectedCurrency.symbol]?.percent_change_1h"
+        @update
         class="flex crypto-card__price"
         [ngClass]="{
           'crypto-card__price--low': item.quote[selectedCurrency.symbol]?.percent_change_1h | pricelowhigh
         }"
       >
-        <span class="text-gray-400 mr-2">1h </span>
+        <span class="text-gray-400 mr-2">1h</span>
         <mat-icon class="mr-2">trending_up</mat-icon>
         <span>{{ item.quote[selectedCurrency.symbol]?.percent_change_1h | number: '1.1-4' }}%</span>
       </div>
       <div
-        [@update]="item.quote[selectedCurrency.symbol]?.percent_change_7d"
+        @update
         class="flex crypto-card__price"
         [ngClass]="{
           'crypto-card__price--low': item.quote[selectedCurrency.symbol]?.percent_change_7d | pricelowhigh
         }"
       >
-        <span class="text-gray-400 mr-2">7d </span>
+        <span class="text-gray-400 mr-2">7d</span>
         <mat-icon class="mr-2">trending_up</mat-icon>
         <span>{{ item.quote[selectedCurrency.symbol]?.percent_change_7d | number: '1.1-4' }}%</span>
       </div>
