@@ -1,13 +1,13 @@
-import { reducer, initialState } from './crypto.reducer';
+import { cryptoReducer, cryptoInitialState } from './crypto.reducer';
 
 describe('Crypto Reducer', () => {
   describe('an unknown action', () => {
     it('should return the previous state', () => {
-      const action = {} as any;
+      const action = {} as never;
 
-      const result = reducer(initialState, action);
+      const result = cryptoReducer(cryptoInitialState, action);
 
-      expect(result).toBe(initialState);
+      expect(result).toBe(cryptoInitialState);
     });
   });
 });

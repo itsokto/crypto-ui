@@ -24,6 +24,6 @@ export class CryptoIconRegistryService {
   }
 
   resolveIconWithFallback(name: string): string {
-    return `${namespace}:${iconManifest.find((icon) => icon.symbol === name)?.symbol ?? 'GENERIC'}`;
+    return `${namespace}:${iconManifest?.find((icon) => icon.symbol === name)?.symbol ?? 'GENERIC'}`;
   }
 }

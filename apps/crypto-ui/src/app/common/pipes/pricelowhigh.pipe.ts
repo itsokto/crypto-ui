@@ -4,7 +4,7 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'pricelowhigh',
 })
 export class PricelowhighPipe implements PipeTransform {
-  transform(value?: number): unknown {
+  transform(value?: number): boolean {
     return value ? value < 0 : false;
   }
 }

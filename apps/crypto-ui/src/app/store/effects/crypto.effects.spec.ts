@@ -3,17 +3,16 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Observable } from 'rxjs';
 
 import { CryptoEffects } from './crypto.effects';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('CryptoEffects', () => {
-  let actions$: Observable<any>;
+  let actions$: Observable<unknown>;
   let effects: CryptoEffects;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        CryptoEffects,
-        provideMockActions(() => actions$)
-      ]
+      imports: [HttpClientTestingModule],
+      providers: [CryptoEffects, provideMockActions(() => actions$)],
     });
 
     effects = TestBed.inject(CryptoEffects);

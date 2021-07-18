@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CryptoCardComponent } from './crypto-card.component';
+import { MatIconModule } from '@angular/material/icon';
+import { PricelowhighPipe } from '../../common/pipes/pricelowhigh.pipe';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('CryptoCardComponent', () => {
   let component: CryptoCardComponent;
@@ -8,9 +11,9 @@ describe('CryptoCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CryptoCardComponent ]
-    })
-    .compileComponents();
+      imports: [MatIconModule, NoopAnimationsModule],
+      declarations: [CryptoCardComponent, PricelowhighPipe],
+    }).compileComponents();
   });
 
   beforeEach(() => {
