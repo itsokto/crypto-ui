@@ -24,16 +24,6 @@
   </div>
 
   <div class="mx-auto h-screen max-w-8xl flex flex-wrap items-center justify-center">
-    <cu-crypto-card
-      *ngFor="let item of listing; trackBy: trackByFn"
-      [name]="item.name"
-      [sign]="selectedCurrency.sign"
-      [symbol]="item.symbol"
-      [price]="item.quote[selectedCurrency.symbol]?.price"
-      [percent_change_1h]="item.quote[selectedCurrency.symbol]?.percent_change_1h"
-      [percent_change_24h]="item.quote[selectedCurrency.symbol]?.percent_change_24h"
-      [percent_change_7d]="item.quote[selectedCurrency.symbol]?.percent_change_7d"
-      [percent_change_30d]="item.quote[selectedCurrency.symbol]?.percent_change_30d"
-    ></cu-crypto-card>
+    <cu-crypto-card *ngFor="let item of cryptoItems; trackBy: trackByFn" [data]="item"></cu-crypto-card>
   </div>
 </main>

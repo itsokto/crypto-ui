@@ -4,6 +4,7 @@ import { loadCryptos, loadCryptosFailure, loadCryptosSuccess } from '../actions/
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { CryptoApiService } from '../../crypto/services/crypto.api.service';
 import { of } from 'rxjs';
+import { CryptoCardData } from '../../components/crypto-card/models/crypto-card-data';
 
 @Injectable()
 export class CryptoEffects {
@@ -13,8 +14,24 @@ export class CryptoEffects {
     this.actions$.pipe(
       ofType(loadCryptos),
       switchMap(({ params }) =>
-        this._cryptoApi.getListingLatest(params?.convert).pipe(
-          map((response) => loadCryptosSuccess({ data: response.data ?? [] })),
+        this._cryptoApi.getListingLatest(params?.convert?.symbol).pipe(
+          map((response) =>
+            response.data?.map((listing) => {
+              const currency = params?.convert?.symbol ?? 'USD';
+              return <CryptoCardData>{
+                id: listing.id,
+                name: listing.name,
+                sign: params?.convert?.sign ?? '$',
+                symbol: listing.symbol,
+                price: listing.quote[currency].price,
+                percent_change_1h: listing.quote[currency].percent_change_1h,
+                percent_change_24h: listing.quote[currency].percent_change_24h,
+                percent_change_7d: listing.quote[currency].percent_change_7d,
+                percent_change_30d: listing.quote[currency].percent_change_30d,
+              };
+            })
+          ),
+          map((data) => loadCryptosSuccess({ data: data ?? [] })),
           catchError((error) => of(loadCryptosFailure({ error })))
         )
       )

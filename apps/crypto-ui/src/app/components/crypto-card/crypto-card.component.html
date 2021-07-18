@@ -2,56 +2,56 @@
   <div class="flex items-center text-xl text-gray-200 mb-2">
     <mat-icon
       class="mr-2 crypto-card__icon"
-      [svgIcon]="cryptoIconRegistry.resolveIconWithFallback(symbol ?? '')"
+      [svgIcon]="cryptoIconRegistry.resolveIconWithFallback(data.symbol)"
     ></mat-icon>
-    <span class="mr-2">{{ name }}</span>
-    <span class="text-gray-400"> {{ symbol }} </span>
+    <span class="mr-2">{{ data.name }}</span>
+    <span class="text-gray-400"> {{ data.symbol }} </span>
   </div>
-  <p class="text-base text-gray-400 mb-2">{{ sign }} {{ price | number: '1.1-6' }}</p>
+  <p class="text-base text-gray-400 mb-2">{{ data.sign }} {{ data.price | number: '1.1-6' }}</p>
   <div class="grid grid-cols-2 grid-rows-2">
     <div
-      [@priceUpdate]="percent_change_1h"
+      [@priceUpdate]="data.percent_change_1h"
       class="crypto-card__price"
       [ngClass]="{
-        'crypto-card__price--low': percent_change_1h | pricelowhigh
+        'crypto-card__price--low': data.percent_change_1h | pricelowhigh
       }"
     >
       <span class="text-gray-400 mr-2">1h</span>
       <mat-icon class="mr-2">arrow_drop_up</mat-icon>
-      <span>{{ percent_change_1h | number: '1.1-4' }}%</span>
+      <span>{{ data.percent_change_1h | number: '1.1-4' }}%</span>
     </div>
     <div
-      [@priceUpdate]="percent_change_24h"
+      [@priceUpdate]="data.percent_change_24h"
       class="crypto-card__price"
       [ngClass]="{
-        'crypto-card__price--low': percent_change_24h | pricelowhigh
+        'crypto-card__price--low': data.percent_change_24h | pricelowhigh
       }"
     >
       <span class="text-gray-400 mr-2">24h</span>
       <mat-icon class="mr-2">arrow_drop_up</mat-icon>
-      <span>{{ percent_change_24h | number: '1.1-4' }}%</span>
+      <span>{{ data.percent_change_24h | number: '1.1-4' }}%</span>
     </div>
     <div
-      [@priceUpdate]="percent_change_7d"
+      [@priceUpdate]="data.percent_change_7d"
       class="crypto-card__price"
       [ngClass]="{
-        'crypto-card__price--low': percent_change_7d | pricelowhigh
+        'crypto-card__price--low': data.percent_change_7d | pricelowhigh
       }"
     >
       <span class="text-gray-400 mr-2">7d</span>
       <mat-icon class="mr-2">arrow_drop_up</mat-icon>
-      <span>{{ percent_change_7d | number: '1.1-4' }}%</span>
+      <span>{{ data.percent_change_7d | number: '1.1-4' }}%</span>
     </div>
     <div
-      [@priceUpdate]="percent_change_30d"
+      [@priceUpdate]="data.percent_change_30d"
       class="crypto-card__price"
       [ngClass]="{
-        'crypto-card__price--low': percent_change_30d | pricelowhigh
+        'crypto-card__price--low': data.percent_change_30d | pricelowhigh
       }"
     >
       <span class="text-gray-400 mr-2">30d</span>
       <mat-icon class="mr-2">arrow_drop_up</mat-icon>
-      <span>{{ percent_change_30d | number: '1.1-4' }}%</span>
+      <span>{{ data.percent_change_30d | number: '1.1-4' }}%</span>
     </div>
   </div>
 </div>

@@ -1,6 +1,7 @@
 import { createAction, props } from '@ngrx/store';
-import { CryptoListing } from '../../crypto/models/crypto.listing';
 import { Update } from '@ngrx/entity';
+import { CryptoCardData } from '../../components/crypto-card/models/crypto-card-data';
+import { CryptoCurrency } from '../../crypto/models/crypto.currency';
 
 export enum ECryptoActions {
   LoadCryptos = '[Crypto] Load Cryptos',
@@ -9,10 +10,10 @@ export enum ECryptoActions {
   UpdateCrypto = '[Crypto] Update Crypto',
 }
 
-export const loadCryptos = createAction(ECryptoActions.LoadCryptos, props<{ params?: { convert?: string } }>());
+export const loadCryptos = createAction(ECryptoActions.LoadCryptos, props<{ params?: { convert?: CryptoCurrency } }>());
 
-export const loadCryptosSuccess = createAction(ECryptoActions.LoadCryptosSuccess, props<{ data: CryptoListing[] }>());
+export const loadCryptosSuccess = createAction(ECryptoActions.LoadCryptosSuccess, props<{ data: CryptoCardData[] }>());
 
 export const loadCryptosFailure = createAction(ECryptoActions.LoadCryptosFailure, props<{ error: any }>());
 
-export const updateCrypto = createAction(ECryptoActions.UpdateCrypto, props<Update<CryptoListing>>());
+export const updateCrypto = createAction(ECryptoActions.UpdateCrypto, props<Update<CryptoCardData>>());

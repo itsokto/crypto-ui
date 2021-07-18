@@ -1,13 +1,13 @@
 import { createReducer, on } from '@ngrx/store';
-import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
-import { CryptoListing } from '../../crypto/models/crypto.listing';
+import { createEntityAdapter, EntityState } from '@ngrx/entity';
 import { loadCryptosSuccess, updateCrypto } from '../actions/crypto.actions';
+import { CryptoCardData } from '../../components/crypto-card/models/crypto-card-data';
 
 export const cryptoFeatureKey = 'crypto';
 
-export type ICryptoState = EntityState<CryptoListing>
+export type ICryptoState = EntityState<CryptoCardData>;
 
-export const cryptoAdapter: EntityAdapter<CryptoListing> = createEntityAdapter<CryptoListing>();
+export const cryptoAdapter = createEntityAdapter<CryptoCardData>();
 export const cryptoInitialState: ICryptoState = cryptoAdapter.getInitialState();
 
 export const cryptoReducer = createReducer(
