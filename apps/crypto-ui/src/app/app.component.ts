@@ -4,7 +4,6 @@ import { BehaviorSubject } from 'rxjs';
 import { CryptoListing, CryptoQuote } from './crypto/models/crypto.listing';
 import { filter, retry, switchMap, take, throttleTime } from 'rxjs/operators';
 import { CryptoCurrency, CryptoCurrencyMap } from './crypto/models/crypto.currency';
-import { trigger, style, animate, transition, animation, useAnimation, state } from '@angular/animations';
 import { CryptoWebsocketCurrency, CryptoWebsocketData } from './crypto/models/websocket/crypto.websocket.data';
 import { Store } from '@ngrx/store';
 import { cryptoSelectors } from './store/selectors/crypto.selectors';
@@ -13,22 +12,13 @@ import { loadCryptos, updateCrypto } from './store/actions/crypto.actions';
 import { MatDialog } from '@angular/material/dialog';
 import { CurrencyModalComponent, CurrencyModalData } from './components/modals/currency-modal/currency-modal.component';
 import { CryptoIconRegistryService } from './crypto/services/crypto.icon.registry.service';
-
-const blinkAnimation = animation([animate('0.1s', style({ color: 'white' })), animate('1s', style({}))]);
-const shrinkAnimation = animation([animate('1s cubic-bezier(0.16, 1, 0.3, 1)')]);
+import { appLoaded } from './common/animations';
 
 @Component({
-  selector: 'crypto-ui-workspace-root',
+  selector: 'cu-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  animations: [
-    trigger('priceUpdate', [transition(':increment, :decrement', useAnimation(blinkAnimation))]),
-    trigger('shrink', [
-      state('false', style({})),
-      state('true', style({ height: '20rem' })),
-      transition('false => true', useAnimation(shrinkAnimation)),
-    ]),
-  ],
+  animations: [appLoaded],
 })
 export class AppComponent implements OnInit {
   title = '';

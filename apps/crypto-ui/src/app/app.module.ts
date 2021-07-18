@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { CryptoModule } from './crypto/crypto.module';
 import { HttpClientModule } from '@angular/common/http';
-import { PricelowhighPipe } from './pipes/pricelowhigh.pipe';
+import { PricelowhighPipe } from './common/pipes/pricelowhigh.pipe';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -18,9 +18,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { CurrencyModalComponent } from './components/modals/currency-modal/currency-modal.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { CryptoCardComponent } from './components/crypto-card/crypto-card.component';
 
 @NgModule({
-  declarations: [AppComponent, PricelowhighPipe, CurrencyModalComponent],
+  declarations: [AppComponent, PricelowhighPipe, CurrencyModalComponent, CryptoCardComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

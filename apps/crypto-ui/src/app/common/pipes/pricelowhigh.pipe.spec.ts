@@ -1,4 +1,4 @@
-import { PricelowhighPipe } from './pipes/pricelowhigh.pipe';
+import { PricelowhighPipe } from './pricelowhigh.pipe';
 
 describe('PricelowhighPipe', () => {
   it('create an instance', () => {

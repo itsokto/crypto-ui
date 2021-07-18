@@ -21,7 +21,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "crypto-ui-workspace",
+            "prefix": "cu",
             "style": "kebab-case"
           }
         ]

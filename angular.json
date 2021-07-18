@@ -5,7 +5,7 @@
       "projectType": "application",
       "root": "apps/crypto-ui",
       "sourceRoot": "apps/crypto-ui/src",
-      "prefix": "crypto-ui-workspace",
+      "prefix": "cu",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
