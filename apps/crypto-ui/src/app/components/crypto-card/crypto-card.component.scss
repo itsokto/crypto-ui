@@ -1,13 +1,21 @@
 .crypto-card {
+  &__title {
+    @apply flex items-center text-xl text-gray-200 mb-2;
+  }
+
+  &__price {
+    @apply text-base text-gray-400 mb-2;
+  }
+
   &__icon {
     width: 32px;
     height: 32px;
   }
 
-  &__price {
+  &__percent-price {
     @apply flex items-center text-green-300;
 
-    &--low {
+    &_low {
       @apply text-red-300;
 
       mat-icon {
