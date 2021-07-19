@@ -1,11 +1,11 @@
 <header>
   <div
-    [@shrink]="!isLoading"
-    class="h-screen bg-gradient-to-br from-blue-900 to-indigo-900 flex flex-col items-center text-center justify-center"
+    class="h-screen/3 bg-gradient-to-br from-blue-900 to-indigo-900 flex flex-col items-center text-center justify-center"
   >
     <p class="text-white text-9xl">
       <span>{{ title }}</span>
     </p>
+
     <p class="text-gray-200 text-4xl bg-gray-800 mt-4">
       <span class="text-gray-400">&#123;</span>
       <span> {{ currentCrypto$ | async }} </span>
@@ -14,7 +14,7 @@
   </div>
 </header>
 
-<main *ngIf="!isLoading">
+<main>
   <div class="mx-auto max-w-8xl p-4 flex place-content-between items-center">
     <span class="text-gray-200 text-xl">Market Live Data</span>
     <button class="text-gray-200" mat-stroked-button (click)="openSelectCurrencyDialog()">
@@ -23,7 +23,13 @@
     </button>
   </div>
 
-  <div class="mx-auto h-screen max-w-8xl flex flex-wrap items-center justify-center">
-    <cu-crypto-card *ngFor="let item of cryptoItems; trackBy: trackByFn" [data]="item"></cu-crypto-card>
+  <div class="mx-auto max-w-8xl flex flex-wrap items-center justify-center">
+    <ng-container *ngIf="!isLoading; else loadingSkeleton">
+      <cu-crypto-card *ngFor="let item of cryptoItems; trackBy: trackByFn" [data]="item"></cu-crypto-card>
+    </ng-container>
+
+    <ng-template #loadingSkeleton>
+      <cu-crypto-card-skeleton *ngFor="let x of [].constructor(6)"></cu-crypto-card-skeleton>
+    </ng-template>
   </div>
 </main>

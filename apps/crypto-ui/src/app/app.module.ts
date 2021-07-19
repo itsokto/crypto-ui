@@ -19,9 +19,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { CurrencyModalComponent } from './components/modals/currency-modal/currency-modal.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CryptoCardComponent } from './components/crypto-card/crypto-card.component';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { CryptoCardSkeletonComponent } from './components/crypto-card/crypto-card-skeleton/crypto-card-skeleton.component';
 
 @NgModule({
-  declarations: [AppComponent, PricelowhighPipe, CurrencyModalComponent, CryptoCardComponent],
+  declarations: [AppComponent, PricelowhighPipe, CurrencyModalComponent, CryptoCardComponent, CryptoCardSkeletonComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -41,6 +43,7 @@ import { CryptoCardComponent } from './components/crypto-card/crypto-card.compon
     MatIconModule,
     MatButtonModule,
     MatDialogModule,
+    NgxSkeletonLoaderModule.forRoot({ theme: {'opacity': '0.3'}}),
   ],
   providers: [],
   bootstrap: [AppComponent],

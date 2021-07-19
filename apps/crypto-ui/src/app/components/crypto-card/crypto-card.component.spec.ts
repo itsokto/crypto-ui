@@ -36,7 +36,6 @@ describe('CryptoCardComponent', () => {
     nativeElement = fixture.nativeElement;
 
     fixture.componentInstance.data = mockData;
-    component.cryptoIconRegistry.registerIcons();
 
     fixture.detectChanges();
   });

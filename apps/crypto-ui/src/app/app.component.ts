@@ -11,7 +11,6 @@ import { IAppState } from './store';
 import { loadCryptos, updateCrypto } from './store/actions/crypto.actions';
 import { MatDialog } from '@angular/material/dialog';
 import { CurrencyModalComponent, CurrencyModalData } from './components/modals/currency-modal/currency-modal.component';
-import { CryptoIconRegistryService } from './crypto/services/crypto.icon.registry.service';
 import { appLoaded } from './common/animations';
 import { CryptoCardData } from './components/crypto-card/models/crypto-card-data';
 
@@ -31,16 +30,9 @@ export class AppComponent implements OnInit {
   currenciesQuotesLatest: Record<string, CryptoListing> = {};
   isLoading = true;
 
-  constructor(
-    private _cryptoApi: CryptoApiService,
-    private _store: Store<IAppState>,
-    public dialog: MatDialog,
-    public readonly cryptoIconRegistry: CryptoIconRegistryService
-  ) {}
+  constructor(private _cryptoApi: CryptoApiService, private _store: Store<IAppState>, private _dialog: MatDialog) {}
 
   ngOnInit(): void {
-    this.cryptoIconRegistry.registerIcons();
-
     this._cryptoApi.setApiKey('1507c111-13c0-45f2-82a3-4b9308314aa2');
 
     this._store.select(cryptoSelectors.selectAll).subscribe((cryptoItems) => {
@@ -96,7 +88,7 @@ export class AppComponent implements OnInit {
       selectedCurrency: this.selectedCurrency,
     };
 
-    const dialog = this.dialog.open(CurrencyModalComponent, { data, maxWidth: 880 });
+    const dialog = this._dialog.open(CurrencyModalComponent, { data, maxWidth: 880 });
 
     dialog.afterClosed().subscribe((currency: CryptoCurrency | undefined) => {
       if (!currency || currency.id === this.selectedCurrency.id) {

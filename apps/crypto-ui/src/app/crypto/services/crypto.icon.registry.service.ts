@@ -9,9 +9,7 @@ const namespace = 'crypto';
   providedIn: 'root',
 })
 export class CryptoIconRegistryService {
-  constructor(private readonly _matIconRegistry: MatIconRegistry, private readonly _sanitizer: DomSanitizer) {}
-
-  registerIcons(): void {
+  constructor(private readonly _matIconRegistry: MatIconRegistry, private readonly _sanitizer: DomSanitizer) {
     iconManifest.forEach((icon) => {
       this._matIconRegistry.addSvgIconInNamespace(
         namespace,
