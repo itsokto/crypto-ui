@@ -1,12 +1,17 @@
 <header>
   <div
-    class="h-screen/3 bg-gradient-to-br from-blue-900 to-indigo-900 flex flex-col items-center text-center justify-center"
+    class="
+      h-screen/5
+      bg-gradient-to-br
+      from-blue-900
+      to-indigo-900
+      flex flex-col
+      items-center
+      text-center
+      justify-center
+    "
   >
-    <p class="text-white text-9xl">
-      <span>{{ title }}</span>
-    </p>
-
-    <p class="text-gray-200 text-4xl bg-gray-800 mt-4">
+    <p class="text-gray-200 text-4xl bg-gray-800 m-0 mt-4">
       <span class="text-gray-400">&#123;</span>
       <span> {{ currentCrypto$ | async }} </span>
       <span class="text-gray-400">&#125;</span>
@@ -24,12 +29,12 @@
   </div>
 
   <div class="mx-auto max-w-8xl flex flex-wrap items-center justify-center">
-    <ng-container *ngIf="!isLoading; else loadingSkeleton">
-      <cu-crypto-card *ngFor="let item of cryptoItems; trackBy: trackByFn" [data]="item"></cu-crypto-card>
+    <ng-container *ngIf="isLoading$ | async; else cards">
+      <cu-crypto-card-skeleton *ngFor="let x of [].constructor(6)"></cu-crypto-card-skeleton>
     </ng-container>
 
-    <ng-template #loadingSkeleton>
-      <cu-crypto-card-skeleton *ngFor="let x of [].constructor(6)"></cu-crypto-card-skeleton>
+    <ng-template #cards>
+      <cu-crypto-card *ngFor="let item of cryptoItems$ | async; trackBy: trackByFn" [data]="item"></cu-crypto-card>
     </ng-template>
   </div>
 </main>

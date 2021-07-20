@@ -1,8 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { CryptoApiService } from './crypto/services/crypto.api.service';
-import { of } from 'rxjs';
+import { combineLatest, Observable, of } from 'rxjs';
 import { CryptoListing } from './crypto/models/crypto.listing';
-import { filter, map, retry, share, startWith, switchMap, take, throttleTime } from 'rxjs/operators';
+import {
+  concatMap,
+  filter,
+  map,
+  retry,
+  share,
+  shareReplay,
+  startWith,
+  switchMap,
+  take,
+  throttleTime,
+} from 'rxjs/operators';
 import { CryptoCurrency, CryptoCurrencyMap } from './crypto/models/crypto.currency';
 import { CryptoWebsocketCurrency, CryptoWebsocketData } from './crypto/models/websocket/crypto.websocket.data';
 import { Store } from '@ngrx/store';
@@ -21,39 +32,38 @@ import { CryptoCardData } from './components/crypto-card/models/crypto-card-data
   animations: [appLoaded],
 })
 export class AppComponent implements OnInit {
-  title = '';
-  cryptoItems: CryptoCardData[] = [];
+  cryptoItems$: Observable<CryptoCardData[]> = of();
   selectedCurrency: CryptoCurrency = { id: 2781, name: '', symbol: 'USD', sign: '$' };
-  currentCrypto$ = of('');
-  fiatMap: CryptoCurrency[] = [];
-  currenciesMap: CryptoCurrencyMap[] = [];
-  currenciesQuotesLatest: Record<string, CryptoListing> = {};
-  isLoading = true;
+  currentCrypto$: Observable<string> = of();
+  fiatMap$: Observable<CryptoCurrency[]> = of();
+  currenciesMap$: Observable<CryptoCurrencyMap[]> = of();
+  currenciesQuotesLatest$: Observable<Record<string, CryptoListing>> = of();
+  isLoading$: Observable<boolean> = of();
 
   constructor(private _cryptoApi: CryptoApiService, private _store: Store<IAppState>, private _dialog: MatDialog) {}
 
   ngOnInit(): void {
     this._cryptoApi.setApiKey('1507c111-13c0-45f2-82a3-4b9308314aa2');
 
-    this._store.select(cryptoSelectors.selectAll).subscribe((cryptoItems) => {
-      this.cryptoItems = cryptoItems;
+    this.cryptoItems$ = this._store.select(cryptoSelectors.selectAll);
 
-      if (cryptoItems.length > 0) {
-        this.isLoading = false;
-      }
-    });
+    this.isLoading$ = this._store.select(cryptoSelectors.selectLoading);
 
-    this._cryptoApi.getFiatMap().subscribe((response) => {
-      this.fiatMap = response.data ?? [];
+    this.fiatMap$ = this._cryptoApi.getFiatMap().pipe(
+      map((response) => response.data),
+      shareReplay()
+    );
 
-      this._cryptoApi.getCurrencyQuotesLatest(this.fiatMap.map((fiat) => fiat.id)).subscribe((response) => {
-        this.currenciesQuotesLatest = response.data ?? {};
-      });
-    });
+    this.currenciesQuotesLatest$ = this.fiatMap$.pipe(
+      concatMap((fiatMap) => this._cryptoApi.getCurrencyQuotesLatest(fiatMap.map((fiat) => fiat.id))),
+      map((response) => response.data),
+      shareReplay()
+    );
 
-    this._cryptoApi.getCurrencyMap().subscribe((response) => {
-      this.currenciesMap = response.data ?? [];
-    });
+    this.currenciesMap$ = this._cryptoApi.getCurrencyMap().pipe(
+      map((response) => response.data),
+      shareReplay()
+    );
 
     const websocket$ = this._store.select(cryptoSelectors.selectIds).pipe(
       filter((ids) => ids.length > 0),
@@ -63,34 +73,38 @@ export class AppComponent implements OnInit {
       share()
     );
 
-    this.currentCrypto$ = websocket$.pipe(
-      map((message) => {
-        return this.currenciesMap.find((map) => map.id === message.d.cr.id)?.symbol ?? '';
+    this.currentCrypto$ = combineLatest([websocket$, this.currenciesMap$]).pipe(
+      map(([message, currenciesMap]) => {
+        return currenciesMap.find((map) => map.id === message.d.cr.id)?.symbol ?? '';
       }),
       startWith('...'),
       throttleTime(200)
     );
 
-    websocket$.subscribe((message) => {
-      if (!this.selectedCurrency || !this.currenciesQuotesLatest) {
+    combineLatest([websocket$, this.currenciesQuotesLatest$]).subscribe(([message, currenciesQuotesLatest]) => {
+      if (!this.selectedCurrency || !currenciesQuotesLatest) {
         return;
       }
 
-      this.updateCrypto(message);
+      this.updateCrypto(message, currenciesQuotesLatest);
     });
 
     this._store.dispatch(loadCryptos({ params: { convert: this.selectedCurrency } }));
   }
 
-  openSelectCurrencyDialog() {
-    const data: CurrencyModalData = {
-      currencies: this.fiatMap,
-      selectedCurrency: this.selectedCurrency,
-    };
+  openSelectCurrencyDialog(): void {
+    const dialog$ = this.fiatMap$.pipe(
+      map((fiatMap) => {
+        const data: CurrencyModalData = {
+          currencies: fiatMap,
+          selectedCurrency: this.selectedCurrency,
+        };
 
-    const dialog = this._dialog.open(CurrencyModalComponent, { data, maxWidth: 880 });
+        return this._dialog.open(CurrencyModalComponent, { data, maxWidth: 880 });
+      })
+    );
 
-    dialog.afterClosed().subscribe((currency: CryptoCurrency | undefined) => {
+    dialog$.pipe(concatMap((dialog) => dialog.afterClosed())).subscribe((currency: CryptoCurrency | undefined) => {
       if (!currency || currency.id === this.selectedCurrency.id) {
         return;
       }
@@ -104,9 +118,12 @@ export class AppComponent implements OnInit {
     return item.id;
   }
 
-  private updateCrypto(data: CryptoWebsocketData<CryptoWebsocketCurrency>): void {
+  private updateCrypto(
+    data: CryptoWebsocketData<CryptoWebsocketCurrency>,
+    currenciesQuotesLatest: Record<string, CryptoListing>
+  ): void {
     // all updates come in USD, so we need to convert them to selected currency
-    const price = this.currenciesQuotesLatest[this.selectedCurrency.id].quote['USD'].price;
+    const price = currenciesQuotesLatest[this.selectedCurrency.id].quote['USD'].price;
 
     const newPrice = data.d.cr.p / price;
 
