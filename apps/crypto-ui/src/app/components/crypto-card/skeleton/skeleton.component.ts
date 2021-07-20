@@ -3,10 +3,10 @@ import { NgxSkeletonLoaderConfigTheme } from 'ngx-skeleton-loader/lib/ngx-skelet
 
 @Component({
   selector: 'cu-crypto-card-skeleton',
-  templateUrl: './crypto-card-skeleton.component.html',
-  styleUrls: ['./crypto-card-skeleton.component.scss'],
+  templateUrl: './skeleton.component.html',
+  styleUrls: ['./skeleton.component.scss'],
 })
-export class CryptoCardSkeletonComponent {
+export class SkeletonComponent {
   priceTheme: NgxSkeletonLoaderConfigTheme = {
     width: '150px',
     'margin-bottom': '0.5rem',
