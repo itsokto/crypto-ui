@@ -20,21 +20,5 @@
 </header>
 
 <main>
-  <div class="mx-auto max-w-8xl p-4 flex place-content-between items-center">
-    <span class="text-gray-200 text-xl">Market Live Data</span>
-    <button class="text-gray-200" mat-stroked-button (click)="openSelectCurrencyDialog()">
-      {{ selectedCurrency.symbol }}
-      <mat-icon>expand_more</mat-icon>
-    </button>
-  </div>
-
-  <div class="mx-auto max-w-8xl flex flex-wrap items-center justify-center">
-    <ng-container *ngIf="isLoading$ | async; else cards">
-      <cu-crypto-card-skeleton *ngFor="let x of [].constructor(6)"></cu-crypto-card-skeleton>
-    </ng-container>
-
-    <ng-template #cards>
-      <cu-crypto-card *ngFor="let item of cryptoItems$ | async; trackBy: trackByFn" [data]="item"></cu-crypto-card>
-    </ng-template>
-  </div>
+  <cu-crypto-list></cu-crypto-list>
 </main>

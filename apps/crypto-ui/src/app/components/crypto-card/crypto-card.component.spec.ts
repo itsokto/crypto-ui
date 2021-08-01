@@ -6,6 +6,7 @@ import { PricelowhighPipe } from '../../common/pipes/pricelowhigh.pipe';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CryptoCardData } from './models/crypto-card-data';
+import { CryptoIconRegistryService } from '../../crypto/services';
 
 describe('CryptoCardComponent', () => {
   let component: CryptoCardComponent;
@@ -27,6 +28,7 @@ describe('CryptoCardComponent', () => {
     await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, MatIconModule, NoopAnimationsModule],
       declarations: [CryptoCardComponent, PricelowhighPipe],
+      providers: [CryptoIconRegistryService],
     }).compileComponents();
   });
 

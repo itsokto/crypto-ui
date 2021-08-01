@@ -10,7 +10,6 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
-import { CryptoEffects } from './store/effects/crypto.effects';
 import { metaReducers, reducers } from './store';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatMenuModule } from '@angular/material/menu';
@@ -21,9 +20,17 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { CryptoCardComponent } from './components/crypto-card/crypto-card.component';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { SkeletonComponent } from './components/crypto-card/skeleton/skeleton.component';
+import { CryptoListComponent } from './components/crypto-list/crypto-list.component';
 
 @NgModule({
-  declarations: [AppComponent, PricelowhighPipe, CurrencyModalComponent, CryptoCardComponent, SkeletonComponent],
+  declarations: [
+    AppComponent,
+    PricelowhighPipe,
+    CurrencyModalComponent,
+    CryptoCardComponent,
+    SkeletonComponent,
+    CryptoListComponent,
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { CryptoIconRegistryService } from '../../crypto/services/crypto.icon.registry.service';
+import { CryptoIconRegistryService } from '../../crypto/services';
 import { priceUpdate } from '../../common/animations';
 import { CryptoCardData } from './models/crypto-card-data';
 
