@@ -4,6 +4,9 @@ import { Observable } from 'rxjs';
 
 import { CryptoEffects } from './crypto.effects';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { CryptoModule } from '../../crypto.module';
+import { EffectsModule } from '@ngrx/effects';
+import { provideMockStore } from '@ngrx/store/testing';
 
 describe('CryptoEffects', () => {
   let actions$: Observable<unknown>;
@@ -11,8 +14,8 @@ describe('CryptoEffects', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [CryptoEffects, provideMockActions(() => actions$)],
+      imports: [HttpClientTestingModule, CryptoModule, EffectsModule.forRoot()],
+      providers: [CryptoEffects, provideMockActions(() => actions$), provideMockStore()],
     });
 
     effects = TestBed.inject(CryptoEffects);

@@ -1,22 +1,22 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CryptoResponse } from '../models/crypto.response';
 import { CryptoListing } from '../models/crypto.listing';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { CryptoCurrency, CryptoCurrencyMap } from '../models/crypto.currency';
+import { CRYPTO_MODULE_CONFIG, CryptoModuleConfig } from '../models/crypto-module.config';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class CryptoApiService {
-  private _apiKey: string | undefined;
   private _webSocket: WebSocketSubject<unknown> | undefined;
+  private readonly _apiKey: string | undefined;
 
-  constructor(private _httpClient: HttpClient) {}
-
-  setApiKey(key: string): void {
-    this._apiKey = key;
+  constructor(
+    private _httpClient: HttpClient,
+    @Inject(CRYPTO_MODULE_CONFIG) @Optional() private _config?: CryptoModuleConfig
+  ) {
+    this._apiKey = _config?.apiKey;
   }
 
   getListingLatest(convert?: string): Observable<CryptoResponse<CryptoListing[]>> {
@@ -66,22 +66,11 @@ export class CryptoApiService {
     return this._httpClient.get<T>(url, options);
   }
 
-  connect(cryptoIds: number[]): WebSocketSubject<unknown> {
+  connect(): WebSocketSubject<unknown> {
     if (this._webSocket) {
       return this._webSocket;
     }
 
-    const subject = webSocket('wss://stream.coinmarketcap.com/price/latest');
-    const message = {
-      method: 'subscribe',
-      id: 'price',
-      data: {
-        cryptoIds,
-      },
-    };
-
-    subject.next(message);
-
-    return subject;
+    return webSocket('wss://stream.coinmarketcap.com/price/latest');
   }
 }

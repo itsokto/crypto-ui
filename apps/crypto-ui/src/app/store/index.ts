@@ -1,6 +1,6 @@
 import { ActionReducerMap, MetaReducer } from '@ngrx/store';
 import { environment } from '../../environments/environment';
-import { cryptoReducer, ICryptoState } from './reducers/crypto.reducer';
+import { cryptoReducer, ICryptoState } from '../crypto/store/reducers/crypto.reducer';
 
 export interface IAppState {
   crypto: ICryptoState;

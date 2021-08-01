@@ -1,14 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 
-import { CryptoApiService } from './crypto.api.service';
+import { CryptoApiService } from './crypto-api.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-describe('Crypto.ApiService', () => {
+describe('CryptoApiService', () => {
   let service: CryptoApiService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule]
+      imports: [HttpClientTestingModule],
+      providers: [CryptoApiService]
     });
     service = TestBed.inject(CryptoApiService);
   });

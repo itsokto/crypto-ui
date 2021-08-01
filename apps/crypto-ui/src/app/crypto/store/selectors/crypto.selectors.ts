@@ -1,6 +1,6 @@
 import { cryptoAdapter, cryptoFeatureKey, ICryptoState } from '../reducers/crypto.reducer';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { IAppState } from '../index';
+import { IAppState } from '../../../store';
 
 export const selectCryptoState = createFeatureSelector<IAppState, ICryptoState>(cryptoFeatureKey);
 

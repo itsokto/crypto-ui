@@ -5,9 +5,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 const namespace = 'crypto';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class CryptoIconRegistryService {
   constructor(private readonly _matIconRegistry: MatIconRegistry, private readonly _sanitizer: DomSanitizer) {
     iconManifest.forEach((icon) => {

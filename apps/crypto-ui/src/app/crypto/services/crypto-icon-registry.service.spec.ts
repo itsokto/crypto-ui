@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { CryptoIconRegistryService } from './crypto.icon.registry.service';
+import { CryptoIconRegistryService } from './crypto-icon-registry.service';
 
 describe('Crypto.Icon.RegistryService', () => {
   let service: CryptoIconRegistryService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({ providers: [CryptoIconRegistryService] });
     service = TestBed.inject(CryptoIconRegistryService);
   });
 

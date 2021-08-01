@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { loadCryptos, loadCryptosFailure, loadCryptosSuccess } from '../actions/crypto.actions';
 import { catchError, map, switchMap } from 'rxjs/operators';
-import { CryptoApiService } from '../../crypto/services/crypto.api.service';
 import { of } from 'rxjs';
-import { CryptoCardData } from '../../components/crypto-card/models/crypto-card-data';
+import { CryptoApiService } from '../../services';
+import { CryptoModel } from '../models/crypto.model';
 
 @Injectable()
 export class CryptoEffects {
@@ -18,7 +18,7 @@ export class CryptoEffects {
           map((response) =>
             response.data?.map((listing) => {
               const currency = params?.convert?.symbol ?? 'USD';
-              return <CryptoCardData>{
+              return <CryptoModel>{
                 id: listing.id,
                 name: listing.name,
                 sign: params?.convert?.sign ?? '$',

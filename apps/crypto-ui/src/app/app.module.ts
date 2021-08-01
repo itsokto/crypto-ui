@@ -28,7 +28,6 @@ import { SkeletonComponent } from './components/crypto-card/skeleton/skeleton.co
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    CryptoModule,
     StoreModule.forRoot(reducers, {
       metaReducers,
       runtimeChecks: {
@@ -36,7 +35,7 @@ import { SkeletonComponent } from './components/crypto-card/skeleton/skeleton.co
         strictStateImmutability: true,
       },
     }),
-    EffectsModule.forRoot([CryptoEffects]),
+    EffectsModule.forRoot(),
     !environment.production ? StoreDevtoolsModule.instrument({ maxAge: 50 }) : [],
     ScrollingModule,
     MatMenuModule,
@@ -44,8 +43,8 @@ import { SkeletonComponent } from './components/crypto-card/skeleton/skeleton.co
     MatButtonModule,
     MatDialogModule,
     NgxSkeletonLoaderModule.forRoot(),
+    CryptoModule.forRoot({ apiKey: '1507c111-13c0-45f2-82a3-4b9308314aa2' }),
   ],
-  providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
